@@ -122,6 +122,35 @@ public class EventoController {
 
 
 
+    @PutMapping(value = "/evento")
+    public ResponseEntity<HashMap<String, Object>> editarEvento(
+            @PathVariable("id") String idStr,
+            @RequestBody Evento evento) {
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+        System.out.println(idStr);
+        try {
+            int id = Integer.parseInt(idStr);
+            if (id > 0) {
+                Optional<Evento> opt = eventoRepository.findById(id);
+                if (opt.isPresent()) {
+                    Evento eventoFromDB = opt.get();
+                } else {
+                    responseMap.put("msg", "La solicitud a aprobar no existe");
+                }
+            } else {
+                responseMap.put("msg", "Debe enviar un ID");
+            }
+
+        } catch (NumberFormatException e) {
+            responseMap.put("msg","el ID debe ser un número entero positivo");
+        }
+        responseMap.put("result","failure");
+        return ResponseEntity.badRequest().body(responseMap);
+    }
+
+
+
 
 
 
