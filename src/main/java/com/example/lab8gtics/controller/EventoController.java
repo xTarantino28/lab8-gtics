@@ -94,6 +94,33 @@ public class EventoController {
 
 
 
+    @DeleteMapping(value = "/evento/{id}")
+    public ResponseEntity<HashMap<String, Object>> borrarEvento(
+            @PathVariable("id") String idStr
+    ) {
+
+        HashMap<String, Object> responseMap = new HashMap<>();
+
+        try {
+            int id = Integer.parseInt(idStr);
+            if (eventoRepository.existsById(id)) {
+
+                eventoRepository.deleteById(id);
+                responseMap.put("estado", "borrado exitoso");
+                return ResponseEntity.ok(responseMap);
+            } else {
+                responseMap.put("resultado", "falla");
+                responseMap.put("msg", "Evento no encontrado");
+                return ResponseEntity.badRequest().body(responseMap);
+            }
+        } catch (NumberFormatException ex) {
+            responseMap.put("resultado", "falla");
+            responseMap.put("msg", "El ID debe ser un número entero positivo");
+            return ResponseEntity.badRequest().body(responseMap);
+        }
+    }
+
+
 
 
 
